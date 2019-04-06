@@ -26,7 +26,7 @@ def movies():
 
 @app.route('/tvshows')
 def tv_shows():
-    json_string = """
+    json_string1 = """
     [{
     "url":"http://www.tvmaze.com/shows/2705/narcos",
     "name":"Narcos",
@@ -34,9 +34,9 @@ def tv_shows():
     "genres":[  
       "Drama",
       "Crime"
-    ]},
-    {  
-    "url":"http://www.tvmaze.com/shows/305/black-mirror",
+    ]}
+    
+    {"url":"http://www.tvmaze.com/shows/305/black-mirror",
     "name":"Black Mirror",
     "language":"English",
     "genres":[  
@@ -44,9 +44,8 @@ def tv_shows():
         "Science-Fiction",
         "Thriller"
    ]},
-   {  
-    "url":"http://www.tvmaze.com/shows/305/black-mirror",
-    "name":"Black Mirror",
+   "url":"http://www.tvmaze.com/shows/305/black-mirror",
+   "name":"Black Mirror",
     "type":"Scripted",
     "language":"English",
     "genres":[  
@@ -54,12 +53,12 @@ def tv_shows():
         "Science-Fiction",
         "Thriller"
     ]
-    }]    
+    }]
     """
     # Write code here to take the `json_string` and return list of movies to the user
 
-
-    return render_template('tv_shows.html')
+    parsed_json1 = json.loads(json_string1)
+    return render_template('tv_shows.html', tvshows=parsed_json1)
 
 
 ############################
@@ -67,14 +66,15 @@ def tv_shows():
 ############################
 @app.route('/dogs')
 def dog_breeds():
-    """
-    If you visit https://dog.ceo/api/breeds/list/all 
-    a list of all dog breeds is returned. Try this in your browser! (Chrome/firefox)
+    
+    response = requests.get("https://dog.ceo/api/breeds/list/all")
+    
+    parsed_content = json.loads(response.content)
+    dog_list = parsed_content["message"]
 
-    Using the `requests` library (as shown in the slides)
-    Do a GET request to the link above to get all dog breeds and return them
-    to them as a list to the user as a bullet pointed list
-    """
+    print("dog_list")
+    return render_template('dogs.html', dogs=dog_list)
+
     return render_template('dogs.html')
 
 if __name__ == '__main__':
